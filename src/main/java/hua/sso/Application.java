@@ -2,6 +2,9 @@ package hua.sso;
 
 import java.util.List;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -52,9 +55,15 @@ public class Application {
 	
 	@RequestMapping("/sso/findAll")
 	@ResponseBody
-	public List<Customer> findAll() {
+	public List<Customer> findAll(HttpServletResponse response) {
 		List<Customer> list = repository.findAll();
 		System.out.println("findAll" + list);
+		Cookie cookie = new Cookie("token", "test001");
+		cookie.setMaxAge(10000);
+		cookie.setPath("/");
+		cookie.setDomain("");
+		cookie.setHttpOnly(true);
+		response.addCookie(cookie);
 		return list;
 	}
 	
